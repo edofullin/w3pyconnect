@@ -13,13 +13,13 @@ API_ENDPOINT = "https://apigw.verymobile.it/api"
 REQUIRED_HEADERS = {"X-Wind-Client": "app-and", "X-Language": "en", "X-Brand": "DEA"}
 
 class VeryAPI():
-    def __init__(self, username, password) -> None:
+    def __init__(self, username, password, session=None) -> None:
         self._token = ""
         self._lines = {} # format "LINE_NUMBER": "CONTRACT_ID"
         self._username = username
         self._password = password
 
-        self._session = aiohttp.ClientSession()
+        self._session = aiohttp.ClientSession() if session is not None else session
     
     async def login(self):
         
