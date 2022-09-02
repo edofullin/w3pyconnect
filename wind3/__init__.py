@@ -85,11 +85,11 @@ class VeryAPI():
         insights = oline["insightsSummary"]
 
         return {
-            "CREDIT": oline["credit"],
-            "VOICE": insights["national"]["voice"]["available"] if not insights["national"]["voice"]["unlimited"] else -1,
-            "SMS": insights["national"]["sms"]["available"] if not insights["national"]["sms"]["unlimited"] else -1,
-            "DATA_NATIONAL": insights["national"]["data"]["available"] if not insights["national"]["data"]["unlimited"] else -1,
-            "DATA_ROAMING": insights["roaming"]["data"]["available"] if not insights["roaming"]["data"]["unlimited"] else -1,
+            "credit": oline["credit"],
+            "voiceMinutes": insights["national"]["voice"]["available"] if not insights["national"]["voice"]["unlimited"] else -1,
+            "sms": insights["national"]["sms"]["available"] if not insights["national"]["sms"]["unlimited"] else -1,
+            "dataNational": insights["national"]["data"]["available"] if not insights["national"]["data"]["unlimited"] else -1,
+            "dataRoaming": insights["roaming"]["data"]["available"] if not insights["roaming"]["data"]["unlimited"] else -1,
         }
             
 
