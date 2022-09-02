@@ -19,7 +19,7 @@ class VeryAPI():
         self._username = username
         self._password = password
 
-        self._session = aiohttp.ClientSession() if session is not None else session
+        self._session = aiohttp.ClientSession() if session is None else session
     
     async def login(self):
         
@@ -58,6 +58,9 @@ class VeryAPI():
         return self._lines.keys()
 
     async def _request_unfolded(self, lineid, contractid):
+        if self._token is None:
+            self.login()
+
         headers = REQUIRED_HEADERS.copy()
         headers["Authorization"] = f"Bearer {self._token}"
 
@@ -91,7 +94,10 @@ class VeryAPI():
             "dataNational": insights["national"]["data"]["available"] if not insights["national"]["data"]["unlimited"] else -1,
             "dataRoaming": insights["roaming"]["data"]["available"] if not insights["roaming"]["data"]["unlimited"] else -1,
         }
-            
+    
+    async def close(self):
+        await self._session.close()
+        self._session = None
 
 
 

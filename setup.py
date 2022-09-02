@@ -5,7 +5,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="w3pyconnect",
-    version="0.2.1",
+    version="0.3.0",
     author="Edoardo Fullin",
     author_email="edoardo.fullin@outlook.com",
     description="Wind3 API Wrapper",
