@@ -12,7 +12,7 @@ logger = logging.getLogger(__name__)
 API_ENDPOINT = "https://apigw.verymobile.it/api"
 REQUIRED_HEADERS = {"X-Wind-Client": "app-and", "X-Language": "en", "X-Brand": "DEA"}
 
-class VeryAPI():
+class W3API():
     def __init__(self, username, password, session=None) -> None:
         self._token = ""
         self._lines = {} # format "LINE_NUMBER": "CONTRACT_ID"
@@ -74,6 +74,18 @@ class VeryAPI():
         
             return await resp.json()
 
+    async def get_lines_counters(self):
+        counters = []
+
+        print(self._lines)
+
+        for id,cid in self._lines.items():
+            cnt = await self.get_counters(id)
+        
+        counters.append(cnt)
+
+        return counters
+
     async def get_counters(self, line):
 
         json = await self._request_unfolded(line, self._lines[line])
@@ -88,6 +100,7 @@ class VeryAPI():
         insights = oline["insightsSummary"]
 
         return {
+            "number": line,
             "credit": oline["credit"],
             "voiceMinutes": insights["national"]["voice"]["available"] if not insights["national"]["voice"]["unlimited"] else -1,
             "sms": insights["national"]["sms"]["available"] if not insights["national"]["sms"]["unlimited"] else -1,
