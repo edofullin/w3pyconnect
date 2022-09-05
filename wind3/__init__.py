@@ -77,8 +77,6 @@ class W3API():
     async def get_lines_counters(self):
         counters = []
 
-        print(self._lines)
-
         for id,cid in self._lines.items():
             cnt = await self.get_counters(id)
         
