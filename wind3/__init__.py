@@ -41,6 +41,12 @@ class W3API():
             self._last_request = time.time()
             logger.debug(f"W3 response status {resp.status}")
  
+            if resp.status == 429:
+                logger.warn("W3: rate limiting")
+                await asyncio.sleep(RATE_LIMIT)
+
+                return await self.login()
+
             if resp.status != 200:
                 logger.error(f"VeryAPI: response code {resp.status}")
                 raise AuthenticationException(await resp.json())
@@ -80,6 +86,12 @@ class W3API():
         async with self._session.get(url=f"{API_ENDPOINT}/ob/v2/contract/lineunfolded", headers=headers, params=data) as resp:
             self._last_request = time.time()
 
+            if resp.status == 429:
+                logger.warn("W3: rate limiting")
+                await asyncio.sleep(RATE_LIMIT)
+
+                return await self._request_unfolded(lineid, contractid)
+            
             if resp.status != 200:
                 logger.error(f"VeryAPI: response code {resp.status}")
                 raise RuntimeError(f"VeryAPI: response code {resp.status}")
