@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 API_ENDPOINT = "https://apigw.verymobile.it/api"
 REQUIRED_HEADERS = {"X-Wind-Client": "app-and", "X-Language": "en", "X-Brand": "DEA"}
-RATE_LIMIT = 5
+RATE_LIMIT = 7
 MAX_RETRY = 3
 
 class W3API():
