@@ -31,9 +31,7 @@ class W3API():
 
         async with self._session.post(url=f"{API_ENDPOINT}/v4/login/credentials", headers=REQUIRED_HEADERS, json=data) as resp:
             logger.debug(f"W3 response status {resp.status}")
-            logger.debug(await resp.text())
-
-            
+ 
             if resp.status != 200:
                 logger.error(f"VeryAPI: response code {resp.status}")
                 raise AuthenticationException(await resp.json())
