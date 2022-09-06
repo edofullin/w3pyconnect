@@ -10,5 +10,8 @@ class UnsupportedLineException(BaseException):
 class NoLinesException(BaseException):
     pass
 
+class RateLimitException(BaseException):
+    pass
+
 class InvalidLineException(BaseException):
     pass
