@@ -1,8 +1,10 @@
+import asyncio
 import json
 from urllib import response
 import requests
 import logging
 import aiohttp
+import time
 
 from .exceptions import *
 
@@ -11,6 +13,7 @@ logger = logging.getLogger(__name__)
 
 API_ENDPOINT = "https://apigw.verymobile.it/api"
 REQUIRED_HEADERS = {"X-Wind-Client": "app-and", "X-Language": "en", "X-Brand": "DEA"}
+RATE_LIMIT = 5
 
 class W3API():
     def __init__(self, username, password, session=None) -> None:
@@ -18,6 +21,7 @@ class W3API():
         self._lines = {} # format "LINE_NUMBER": "CONTRACT_ID"
         self._username = username
         self._password = password
+        self._last_request = 0
 
         self._session = aiohttp.ClientSession() if session is None else session
     
@@ -29,7 +33,12 @@ class W3API():
             "rememberMe": False
         }
 
+        if abs(time.time() - self._last_request) < RATE_LIMIT:
+            logger.warn("W3: rate limiting")
+            await asyncio.sleep(RATE_LIMIT)
+
         async with self._session.post(url=f"{API_ENDPOINT}/v4/login/credentials", headers=REQUIRED_HEADERS, json=data) as resp:
+            self._last_request = time.time()
             logger.debug(f"W3 response status {resp.status}")
  
             if resp.status != 200:
@@ -64,7 +73,12 @@ class W3API():
 
         data = {"contractId": contractid, "lineId": lineid}
 
+        if abs(time.time() - self._last_request) < RATE_LIMIT:
+            logger.warn("W3: rate limiting")
+            await asyncio.sleep(RATE_LIMIT)
+
         async with self._session.get(url=f"{API_ENDPOINT}/ob/v2/contract/lineunfolded", headers=headers, params=data) as resp:
+            self._last_request = time.time()
 
             if resp.status != 200:
                 logger.error(f"VeryAPI: response code {resp.status}")
