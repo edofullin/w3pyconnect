@@ -36,11 +36,11 @@ class W3API():
             
             if resp.status != 200:
                 logger.error(f"VeryAPI: response code {resp.status}")
-                raise AuthenticationException(resp.json())
+                raise AuthenticationException(await resp.json())
 
             if "X-W3-Token" not in resp.headers:
                 logger.error(f"VeryAPI: token not in header")
-                raise AuthenticationException(resp.json())
+                raise AuthenticationException(await resp.json())
 
             self._token = resp.headers["X-W3-Token"]
             
